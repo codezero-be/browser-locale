@@ -94,7 +94,7 @@ class BrowserLocale
 
         $localeInstance = null;
 
-        if ($locale) {
+        if ($locale !== null) {
             $localeInstance = new Locale();
             $localeInstance->locale = $locale;
             $localeInstance->language = $this->getLanguage($locale);
@@ -108,17 +108,21 @@ class BrowserLocale
     /**
      * Convert a comma separated list to an array.
      *
+     * Example: ["en", "en-US;q=0.8"]
+     *
      * @param string $httpAcceptLanguages
      *
      * @return array
      */
     private function splitAcceptLanguages($httpAcceptLanguages)
     {
-        return explode(',', $httpAcceptLanguages) ?: []; // ["en", "en-US;q=0.8"]
+        return explode(',', $httpAcceptLanguages) ?: [];
     }
 
     /**
      * Split a language code and the relative quality factor by semicolon.
+     *
+     * Example: ["en"] or ["en-US"] or ["en-US", "q=0.8"]
      *
      * @param string $httpAcceptLanguage
      *
@@ -126,11 +130,13 @@ class BrowserLocale
      */
     private function splitAcceptLanguage($httpAcceptLanguage)
     {
-        return explode(';', trim($httpAcceptLanguage)) ?: []; // ["en"] or ["en-US"] or ["en-US", "q=0.8"]
+        return explode(';', trim($httpAcceptLanguage)) ?: [];
     }
 
     /**
      * Get the 2-letter language code from the locale.
+     *
+     * Example: "en"
      *
      * @param string $locale
      *
@@ -138,11 +144,13 @@ class BrowserLocale
      */
     private function getLanguage($locale)
     {
-        return strtolower(substr($locale, 0, 2)); // "en"
+        return strtolower(substr($locale, 0, 2));
     }
 
     /**
      * Get the 2-letter country code from the locale.
+     *
+     * Example: "US"
      *
      * @param string $locale
      *
@@ -154,11 +162,13 @@ class BrowserLocale
             return '';
         }
 
-        return strtoupper(substr($locale, $divider + 1, 2)); // "US"
+        return strtoupper(substr($locale, $divider + 1, 2));
     }
 
     /**
      * Parse the relative quality factor and return its value.
+     *
+     * Example: 1.0 or 0.8
      *
      * @param string $q
      *
@@ -173,7 +183,7 @@ class BrowserLocale
             $weight = ((float) $parts[1]);
         }
 
-        return $weight; // 1.0 or 0.8
+        return $weight;
     }
 
     /**
