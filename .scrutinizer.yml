@@ -1,0 +1,24 @@
+filter:
+    excluded_paths:
+        - 'tests/*'
+        - 'spec/*'
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
+
+coding_style:
+    php:
+        spaces:
+            around_operators:
+                negation: true
+
+build:
+  tests:
+    override:
+      -
+        command: 'vendor/bin/phpspec run -f progress -c phpspec-ci.yml'
+        coverage:
+          file: 'coverage.clover'
+          format: 'php-clover'

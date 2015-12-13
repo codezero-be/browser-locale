@@ -1,0 +1,23 @@
+suites:
+  codezero_suite:
+    namespace: CodeZero\BrowserLocale
+    src_path: src
+    spec_path: .
+    spec_prefix: spec
+    psr4_prefix: CodeZero\BrowserLocale
+
+extensions:
+  - PhpSpec\Extension\CodeCoverageExtension
+
+code_coverage:
+  format:
+    - html
+    - clover
+  output:
+    html: coverage
+    clover: coverage.clover
+  blacklist:
+    - spec
+    - vendor
+  blacklist_files:
+    - src/Locale.php
