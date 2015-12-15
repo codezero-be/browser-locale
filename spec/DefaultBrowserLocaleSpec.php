@@ -5,7 +5,7 @@ namespace spec\CodeZero\BrowserLocale;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class BrowserLocaleSpec extends ObjectBehavior
+class DefaultBrowserLocaleSpec extends ObjectBehavior
 {
     function let()
     {
