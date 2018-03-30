@@ -17,18 +17,12 @@ class BrowserLocale
      *
      * @param string $httpAcceptLanguages
      */
-    public function __construct($httpAcceptLanguages = null)
+    public function __construct($httpAcceptLanguages)
     {
         // $_SERVER["HTTP_ACCEPT_LANGUAGE"] will return a comma separated list of language codes.
         // Each language code MAY have a "relative quality factor" attached ("nl;q=0.8") which
         // determines the order of preference. For example: "nl-NL,nl;q=0.8,en-US;q=0.6,en;q=0.4"
-        if ($httpAcceptLanguages === null && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-            $this->parseAcceptLanguages($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
-        }
-
-        if ($httpAcceptLanguages) {
-            $this->parseAcceptLanguages($httpAcceptLanguages);
-        }
+        $this->parseAcceptLanguages($httpAcceptLanguages);
     }
 
     /**
@@ -69,6 +63,10 @@ class BrowserLocale
      */
     protected function parseAcceptLanguages($httpAcceptLanguages)
     {
+        if (empty($httpAcceptLanguages)) {
+            return;
+        }
+
         foreach ($this->splitAcceptLanguages($httpAcceptLanguages) as $httpAcceptLanguage) {
             if ($locale = $this->parseAcceptLanguage($httpAcceptLanguage)) {
                 $this->locales[] = $locale;
