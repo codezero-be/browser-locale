@@ -3,10 +3,12 @@
     "description": "Get the most preferred locales from your visitor's browser.",
     "keywords": [
         "website",
+        "browser",
         "locale",
         "language",
         "country",
-        "php"
+        "php",
+        "detect"
     ],
     "license": "MIT",
     "authors": [
