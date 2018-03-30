@@ -13,6 +13,13 @@ class BrowserLocale
     protected $locales = [];
 
     /**
+     * Supported filters for getLocales().
+     *
+     * @var array
+     */
+    protected $filters = ['full', 'language', 'country', 'weight'];
+
+    /**
      * Create a new BrowserLocale instance.
      *
      * @param string $httpAcceptLanguages
@@ -32,7 +39,7 @@ class BrowserLocale
      */
     public function getLocale()
     {
-        return isset($this->locales[0]) ? $this->locales[0] : null;
+        return $this->locales[0] ?? null;
     }
 
     /**
@@ -41,7 +48,7 @@ class BrowserLocale
      * If a property filter is specified, a flattened array of locale information,
      * containing only the requested property values will be returned instead.
      *
-     * @param string $propertyFilter full|language|country|weight
+     * @param string $propertyFilter
      *
      * @return array
      */
@@ -142,7 +149,7 @@ class BrowserLocale
      */
     protected function getLanguage($locale)
     {
-        return strtolower(substr($locale, 0, 2));
+        return substr($locale, 0, 2);
     }
 
     /**
@@ -160,7 +167,7 @@ class BrowserLocale
             return '';
         }
 
-        return strtoupper(substr($locale, $divider + 1, 2));
+        return substr($locale, $divider + 1, 2);
     }
 
     /**
@@ -210,10 +217,9 @@ class BrowserLocale
      */
     protected function filterLocaleInfo($property)
     {
-        $filters = ['full', 'language', 'country', 'weight'];
         $locales = $this->locales;
 
-        if ( ! in_array($property, $filters)) {
+        if ( ! in_array($property, $this->filters)) {
             return $locales;
         }
 
