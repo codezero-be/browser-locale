@@ -35,7 +35,7 @@ class BrowserLocale
     /**
      * Get the most preferred locale.
      *
-     * @return Locale|null
+     * @return \CodeZero\BrowserLocale\Locale|null
      */
     public function getLocale()
     {
@@ -88,24 +88,24 @@ class BrowserLocale
      *
      * @param string $httpAcceptLanguage
      *
-     * @return Locale|null
+     * @return \CodeZero\BrowserLocale\Locale|null
      */
     protected function parseAcceptLanguage($httpAcceptLanguage)
     {
         $parts = $this->splitAcceptLanguage($httpAcceptLanguage);
 
-        $locale = isset($parts[0]) ? $parts[0] : null;
-        $weight = isset($parts[1]) ? $parts[1] : null;
+        $locale = $parts[0] ?? null;
+        $weight = $parts[1] ?? null;
 
-        $localeInstance = null;
-
-        if ($locale !== null) {
-            $localeInstance = new Locale();
-            $localeInstance->full = $locale;
-            $localeInstance->language = $this->getLanguage($locale);
-            $localeInstance->country = $this->getCountry($locale);
-            $localeInstance->weight = $this->getWeight($weight);
+        if ($locale === null) {
+            return null;
         }
+
+        $localeInstance = new Locale();
+        $localeInstance->full = $locale;
+        $localeInstance->language = $this->getLanguage($locale);
+        $localeInstance->country = $this->getCountry($locale);
+        $localeInstance->weight = $this->getWeight($weight);
 
         return $localeInstance;
     }
