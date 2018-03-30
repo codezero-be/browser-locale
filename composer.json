@@ -16,16 +16,29 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9"
+        "php": "^7.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "~2.0",
-        "henrikbjorn/phpspec-code-coverage": "~1.0"
+        "phpunit/phpunit": "^6.0"
+    },
+    "scripts": {
+        "test": "phpunit"
     },
     "autoload": {
         "psr-4": {
             "CodeZero\\BrowserLocale\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "autoload-dev": {
+        "psr-4": {
+            "CodeZero\\BrowserLocale\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
