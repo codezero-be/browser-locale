@@ -2,15 +2,15 @@
 
 namespace CodeZero\BrowserLocale\Tests;
 
-use CodeZero\BrowserLocale\DefaultBrowserLocale;
+use CodeZero\BrowserLocale\BrowserLocale;
 use PHPUnit\Framework\TestCase;
 
-class DefaultBrowserLocaleTest extends TestCase
+class BrowserLocaleTest extends TestCase
 {
     /** @test */
     public function it_returns_the_most_preferred_locale()
     {
-        $browser = new DefaultBrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
         $locale = $browser->getLocale();
 
         $this->assertEquals('en-US', $locale->locale);
@@ -22,7 +22,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_the_first_locale_if_two_have_the_same_weight()
     {
-        $browser = new DefaultBrowserLocale('nl-NL,en-US,nl;q=0.4');
+        $browser = new BrowserLocale('nl-NL,en-US,nl;q=0.4');
         $locale = $browser->getLocale();
 
         $this->assertEquals('nl-NL', $locale->locale);
@@ -34,7 +34,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_an_array_of_all_preferred_locales()
     {
-        $browser = new DefaultBrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
         $locales = $browser->getLocales();
 
         $this->assertEquals('en-US', $locales[0]->locale);
@@ -61,7 +61,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_a_simple_array_of_locales()
     {
-        $browser = new DefaultBrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 
         $locales = $browser->getLocales('locale');
 
@@ -71,7 +71,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_a_simple_array_of_language_codes()
     {
-        $browser = new DefaultBrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 
         $locales = $browser->getLocales('language');
 
@@ -81,7 +81,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_a_simple_array_of_country_codes()
     {
-        $browser = new DefaultBrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 
         $locales = $browser->getLocales('country');
 
@@ -91,7 +91,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_a_simple_array_of_weight_values()
     {
-        $browser = new DefaultBrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 
         $locales = $browser->getLocales('weight');
 
@@ -101,7 +101,7 @@ class DefaultBrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_null_or_an_empty_array_if_no_locale_exists()
     {
-        $browser = new DefaultBrowserLocale('');
+        $browser = new BrowserLocale('');
 
         $this->assertEquals(null, $browser->getLocale());
         $this->assertEquals([], $browser->getLocales());
