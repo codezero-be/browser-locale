@@ -1,6 +1,11 @@
 # BrowserLocale
 
-[![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg)]() [![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg)]() [![Build Status](https://img.shields.io/travis/codezero-be/browser-locale.svg?branch=master)](https://travis-ci.org/codezero-be/browser-locale) [![Scrutinizer](https://img.shields.io/scrutinizer/g/codezero-be/browser-locale.svg)](https://scrutinizer-ci.com/g/codezero-be/browser-locale) [![Total Downloads](https://img.shields.io/packagist/dt/codezero/browser-locale.svg)](https://packagist.org/packages/codezero/browser-locale)
+[![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg)]()
+[![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg)]()
+[![Build Status](https://scrutinizer-ci.com/g/codezero-be/browser-locale/badges/build.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/browser-locale/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/codezero-be/browser-locale/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/browser-locale/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/codezero-be/browser-locale/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/browser-locale/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/codezero/browser-locale.svg)](https://packagist.org/packages/codezero/browser-locale)
 
 #### Get the most preferred locales from your visitor's browser.
 
@@ -10,85 +15,100 @@ This can be read by PHP, usually with the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` var
 
 `BrowserLocale` parses this string and lets you access the preferred locales quickly and easily.
 
+##  Requirements
+
+- PHP >= 7.0
+
+## Install
+
+```
+composer require codezero/browser-locale
+```
+
 ## Instantiate
 
-``` 
-use CodeZero\BrowserLocale\BrowserLocale;
-$browser = new BrowserLocale();
+#### For vanilla PHP:
+
+``` php
+$browser = new \CodeZero\BrowserLocale\BrowserLocale($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
 ```
 
-By default the class will look for `$_SERVER["HTTP_ACCEPT_LANGUAGE"]`. If you want to override this, you can pass a string to the constructor. That string should be formatted in the same way as described above.
+#### For Laravel:
 
-## Get primary locale
+Laravel >= 5.5 will automatically register the ServiceProvider so you can get `BrowserLocale` from the IOC container.
 
-To fetch the primary browser locale, you can call `getLocale()`. This will return an instance of `CodeZero\BrowserLocale\Locale` or `null` if no locale exists.
-
-``` 
-$instance = $browser->getLocale();
+```php
+$browser = \App::make(\CodeZero\BrowserLocale\BrowserLocale::class);
 ```
 
-If a locale is returned, you get access to a few properties:
+## Get Primary Locale
 
-``` 
-if ($instance !== null) {
-    $locale   = $instance->locale;   // Example: "en-US"
-    $language = $instance->language; // Example: "en"
-    $country  = $instance->country;  // Example: "US"
-    $weight   = $instance->weight;   // Example: 1.0
+``` php
+$locale = $browser->getLocale();
+```
+
+This will return an instance of `\CodeZero\BrowserLocale\Locale` or `null` if no locale exists.
+
+``` php
+if ($locale !== null) {
+    $full     = $locale->full;     // Example: "en-US"
+    $language = $locale->language; // Example: "en"
+    $country  = $locale->country;  // Example: "US"
+    $weight   = $locale->weight;   // Example: 1.0
 }
 ```
 
-## Get all locales
+## Get All Locales
 
-To fetch all locales that are configured in a visitor's browser, you can call `getLocales()`. This will return an array of `Locale` instances, sorted by weight. So the first array item is the most preferred locale. If no locales exist, an empty array will be returned.
-
-``` 
+```php
 $locales = $browser->getLocales();
+```
 
-foreach ($locales as $instance) {
-    $locale   = $instance->locale;   // Example: "en-US"
-    $language = $instance->language; // Example: "en"
-    $country  = $instance->country;  // Example: "US"
-    $weight   = $instance->weight;   // Example: 1.0  
+This will return an array of `\CodeZero\BrowserLocale\Locale` instances, sorted by weight in descending order. So the first array item is the most preferred locale.
+
+If no locales exist, an empty array will be returned.
+
+``` php
+foreach ($locales as $locale) {
+    $full     = $locale->full;     // Example: "en-US"
+    $language = $locale->language; // Example: "en"
+    $country  = $locale->country;  // Example: "US"
+    $weight   = $locale->weight;   // Example: 1.0  
 }
 ```
 
-## Get flattened array
+## Get Flattened Array
 
-Maybe you want to fetch a simple array with only the 2-letter language codes. Or maybe only the country codes. The `getLocales()` method accepts a property filter to allow for this. The filter can be the name of one of the following properties:
+You can get a flattened array, containing only specific locale info. These arrays will always be sorted by weight in descending order. There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
 
-``` 
-$locales = $browser->getLocales('locales');
-//=> Example: ['en-US', 'en', 'nl-BE', 'nl']
+``` php
+$locales = $browser->getLocales('full');
+//=> Result: ['en-US', 'en', 'nl-BE', 'nl']
 
 $languages = $browser->getLocales('language');
-//=> Example: ['en', 'nl']
+//=> Result: ['en', 'nl']
 
 $countries = $browser->getLocales('country');
-//=> Example: ['US', 'BE']
+//=> Result: ['US', 'BE']
 
 $weights = $browser->getLocales('weight');
-//=> Example: [1.0, 0.8, 0.6, 0.4]
+//=> Result: [1.0, 0.8, 0.6, 0.4]
 ```
-
-These arrays will always be sorted by preference (most preferred first).
-
-There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
 
 ## Testing
 
 ``` 
-$ vendor/bin/phpspec run
+composer test
 ```
 
 ## Security
 
 If you discover any security related issues, please [e-mail me](mailto:ivan@codezero.be) instead of using the issue tracker.
 
+## Changelog
+
+See a list of important changes in the [changelog](CHANGELOG.md).
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
----
-
-[![Analytics](https://ga-beacon.appspot.com/UA-58876018-1/codezero-be/browser-locale)](https://github.com/igrigorik/ga-beacon)
