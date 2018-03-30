@@ -9,7 +9,7 @@ class Locale
      *
      * @var string
      */
-    public $locale;
+    public $full;
 
     /**
      * Language code of the locale.

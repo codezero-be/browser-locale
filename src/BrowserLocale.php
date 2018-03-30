@@ -41,7 +41,7 @@ class BrowserLocale
      * If a property filter is specified, a flattened array of locale information,
      * containing only the requested property values will be returned instead.
      *
-     * @param string $propertyFilter locale|language|country|weight
+     * @param string $propertyFilter full|language|country|weight
      *
      * @return array
      */
@@ -94,7 +94,7 @@ class BrowserLocale
 
         if ($locale !== null) {
             $localeInstance = new Locale();
-            $localeInstance->locale = $locale;
+            $localeInstance->full = $locale;
             $localeInstance->language = $this->getLanguage($locale);
             $localeInstance->country = $this->getCountry($locale);
             $localeInstance->weight = $this->getWeight($weight);
@@ -210,7 +210,7 @@ class BrowserLocale
      */
     protected function filterLocaleInfo($property)
     {
-        $filters = ['locale', 'language', 'country', 'weight'];
+        $filters = ['full', 'language', 'country', 'weight'];
         $locales = $this->locales;
 
         if ( ! in_array($property, $filters)) {
