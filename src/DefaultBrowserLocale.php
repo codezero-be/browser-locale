@@ -10,7 +10,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @var array
      */
-    private $locales = [];
+    protected $locales = [];
 
     /**
      * Create a new DefaultBrowserLocale instance.
@@ -67,7 +67,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return void
      */
-    private function parseAcceptLanguages($httpAcceptLanguages)
+    protected function parseAcceptLanguages($httpAcceptLanguages)
     {
         foreach ($this->splitAcceptLanguages($httpAcceptLanguages) as $httpAcceptLanguage) {
             if ($locale = $this->parseAcceptLanguage($httpAcceptLanguage)) {
@@ -85,7 +85,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return Locale|null
      */
-    private function parseAcceptLanguage($httpAcceptLanguage)
+    protected function parseAcceptLanguage($httpAcceptLanguage)
     {
         $parts = $this->splitAcceptLanguage($httpAcceptLanguage);
 
@@ -114,7 +114,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return array
      */
-    private function splitAcceptLanguages($httpAcceptLanguages)
+    protected function splitAcceptLanguages($httpAcceptLanguages)
     {
         return explode(',', $httpAcceptLanguages) ?: [];
     }
@@ -128,7 +128,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return array
      */
-    private function splitAcceptLanguage($httpAcceptLanguage)
+    protected function splitAcceptLanguage($httpAcceptLanguage)
     {
         return explode(';', trim($httpAcceptLanguage)) ?: [];
     }
@@ -142,7 +142,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return string
      */
-    private function getLanguage($locale)
+    protected function getLanguage($locale)
     {
         return strtolower(substr($locale, 0, 2));
     }
@@ -156,7 +156,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return string
      */
-    private function getCountry($locale)
+    protected function getCountry($locale)
     {
         if (($divider = strpos($locale, '-')) === false){
             return '';
@@ -174,7 +174,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return float
      */
-    private function getWeight($q)
+    protected function getWeight($q)
     {
         $weight = 1.0;
         $parts = explode('=', $q);
@@ -191,7 +191,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return void
      */
-    private function sortLocales()
+    protected function sortLocales()
     {
         usort($this->locales, function ($a, $b) {
             if ($a->weight === $b->weight) {
@@ -210,7 +210,7 @@ class DefaultBrowserLocale implements BrowserLocale
      *
      * @return array
      */
-    private function filterLocaleInfo($property)
+    protected function filterLocaleInfo($property)
     {
         $filters = ['locale', 'language', 'country', 'weight'];
         $locales = $this->locales;
