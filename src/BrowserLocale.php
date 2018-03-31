@@ -5,8 +5,7 @@ namespace CodeZero\BrowserLocale;
 class BrowserLocale
 {
     /**
-     * Array of all preferred locales that are
-     * configured in a visitor's browser.
+     * Array of \CodeZero\BrowserLocale\Locale instances.
      *
      * @var array
      */
@@ -17,7 +16,7 @@ class BrowserLocale
      *
      * @var array
      */
-    protected $filters = ['full', 'language', 'country', 'weight'];
+    protected $filters = ['locale', 'language', 'country', 'weight'];
 
     /**
      * Create a new BrowserLocale instance.
@@ -26,10 +25,7 @@ class BrowserLocale
      */
     public function __construct($httpAcceptLanguages)
     {
-        // $_SERVER["HTTP_ACCEPT_LANGUAGE"] will return a comma separated list of language codes.
-        // Each language code MAY have a "relative quality factor" attached ("nl;q=0.8") which
-        // determines the order of preference. For example: "nl-NL,nl;q=0.8,en-US;q=0.6,en;q=0.4"
-        $this->parseAcceptLanguages($httpAcceptLanguages);
+        $this->parseHttpAcceptLanguages($httpAcceptLanguages);
     }
 
     /**
@@ -44,21 +40,19 @@ class BrowserLocale
 
     /**
      * Get an array of Locale objects in descending order of preference.
+     * Specify a Locale property to get a flattened array of values of that property.
      *
-     * If a property filter is specified, a flattened array of locale information,
-     * containing only the requested property values will be returned instead.
-     *
-     * @param string $propertyFilter
+     * @param string $property
      *
      * @return array
      */
-    public function getLocales($propertyFilter = null)
+    public function getLocales($property = null)
     {
-        if ($propertyFilter === null) {
+        if ( ! in_array($property, $this->filters)) {
             return $this->locales;
         }
 
-        return $this->filterLocaleInfo($propertyFilter);
+        return $this->filterLocaleInfo($property);
     }
 
     /**
@@ -68,80 +62,58 @@ class BrowserLocale
      *
      * @return void
      */
-    protected function parseAcceptLanguages($httpAcceptLanguages)
+    protected function parseHttpAcceptLanguages($httpAcceptLanguages)
     {
-        if (empty($httpAcceptLanguages)) {
-            return;
-        }
+        $locales = $this->split($httpAcceptLanguages, ',');
 
-        foreach ($this->splitAcceptLanguages($httpAcceptLanguages) as $httpAcceptLanguage) {
-            if ($locale = $this->parseAcceptLanguage($httpAcceptLanguage)) {
-                $this->locales[] = $locale;
-            }
+        foreach ($locales as $httpAcceptLanguage) {
+            $this->makeLocale($httpAcceptLanguage);
         }
 
         $this->sortLocales();
     }
 
     /**
-     * Extract and save information from a HTTP Accept Language.
+     * Convert the given HTTP Accept Language to a Locale object.
      *
      * @param string $httpAcceptLanguage
      *
-     * @return \CodeZero\BrowserLocale\Locale|null
+     * @return void
      */
-    protected function parseAcceptLanguage($httpAcceptLanguage)
+    protected function makeLocale($httpAcceptLanguage)
     {
-        $parts = $this->splitAcceptLanguage($httpAcceptLanguage);
+        $parts = $this->split($httpAcceptLanguage, ';');
 
-        $locale = $parts[0] ?? null;
+        $locale = $parts[0];
         $weight = $parts[1] ?? null;
 
-        if ($locale === null) {
-            return null;
+        if (empty($locale)) {
+            return;
         }
 
-        $localeInstance = new Locale();
-        $localeInstance->full = $locale;
-        $localeInstance->language = $this->getLanguage($locale);
-        $localeInstance->country = $this->getCountry($locale);
-        $localeInstance->weight = $this->getWeight($weight);
-
-        return $localeInstance;
+        $this->locales[] = new Locale(
+            $locale,
+            $this->getLanguage($locale),
+            $this->getCountry($locale),
+            $this->getWeight($weight)
+        );
     }
 
     /**
-     * Convert a comma separated list to an array.
+     * Split the given string by the delimiter.
      *
-     * Example: ["en", "en-US;q=0.8"]
-     *
-     * @param string $httpAcceptLanguages
-     *
-     * @return array
-     */
-    protected function splitAcceptLanguages($httpAcceptLanguages)
-    {
-        return explode(',', $httpAcceptLanguages) ?: [];
-    }
-
-    /**
-     * Split a language code and the relative quality factor by semicolon.
-     *
-     * Example: ["en"] or ["en-US"] or ["en-US", "q=0.8"]
-     *
-     * @param string $httpAcceptLanguage
+     * @param string $string
+     * @param string $delimiter
      *
      * @return array
      */
-    protected function splitAcceptLanguage($httpAcceptLanguage)
+    protected function split($string, $delimiter)
     {
-        return explode(';', trim($httpAcceptLanguage)) ?: [];
+        return explode($delimiter, trim($string)) ?: [];
     }
 
     /**
      * Get the 2-letter language code from the locale.
-     *
-     * Example: "en"
      *
      * @param string $locale
      *
@@ -149,13 +121,11 @@ class BrowserLocale
      */
     protected function getLanguage($locale)
     {
-        return substr($locale, 0, 2);
+        return substr($locale, 0, 2) ?: '';
     }
 
     /**
      * Get the 2-letter country code from the locale.
-     *
-     * Example: "US"
      *
      * @param string $locale
      *
@@ -163,17 +133,11 @@ class BrowserLocale
      */
     protected function getCountry($locale)
     {
-        if (($divider = strpos($locale, '-')) === false){
-            return '';
-        }
-
-        return substr($locale, $divider + 1, 2);
+        return substr($locale, 3, 2) ?: '';
     }
 
     /**
      * Parse the relative quality factor and return its value.
-     *
-     * Example: 1.0 or 0.8
      *
      * @param string $q
      *
@@ -181,14 +145,11 @@ class BrowserLocale
      */
     protected function getWeight($q)
     {
-        $weight = 1.0;
-        $parts = explode('=', $q);
+        $parts = $this->split($q, '=');
 
-        if (isset($parts[1])) {
-            $weight = ((float) $parts[1]);
-        }
+        $weight = $parts[1] ?? 1.0;
 
-        return $weight;
+        return (float) $weight;
     }
 
     /**
@@ -217,15 +178,9 @@ class BrowserLocale
      */
     protected function filterLocaleInfo($property)
     {
-        $locales = $this->locales;
-
-        if ( ! in_array($property, $this->filters)) {
-            return $locales;
-        }
-
         $filtered = [];
 
-        foreach ($locales as $locale) {
+        foreach ($this->locales as $locale) {
             if ($locale->$property && ! in_array($locale->$property, $filtered)) {
                 $filtered[] = $locale->$property;
             }

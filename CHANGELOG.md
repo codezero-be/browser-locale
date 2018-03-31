@@ -7,7 +7,6 @@ All notable changes to `BrowserLocale` will be documented in this file.
 - Rename main class & remove interface for simplicity
 - Make constructor argument required
 - Make private methods protected
-- Rename `$locale` property to `$full` in `Locale` class
 - Switch to PHPUnit for testing
 - Add ServiceProvider for Laravel
 

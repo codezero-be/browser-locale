@@ -11,9 +11,12 @@
 
 Every browser has a setting for preferred website locales.
 
-This can be read by PHP, usually with the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` variable. Its value is a string that looks like this: `nl-NL,nl;q=0.8,en-US;q=0.6,en;q=0.4`.
+This can be read by PHP, usually with the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` variable.
 
-`BrowserLocale` parses this string and lets you access the preferred locales quickly and easily.
+> `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` will return a comma separated list of language codes. Each language code MAY have a "relative quality factor" attached ("nl;q=0.8") which determines the order of preference. For example: `nl-NL,nl;q=0.8,en-US;q=0.6,en;q=0.4`. If no relative quality factor is present, the value is by default `1.0`.
+
+**BrowserLocale** parses this string and lets you access the preferred locales quickly and easily.
+
 
 ##  Requirements
 
@@ -51,7 +54,7 @@ This will return an instance of `\CodeZero\BrowserLocale\Locale` or `null` if no
 
 ``` php
 if ($locale !== null) {
-    $full     = $locale->full;     // Example: "en-US"
+    $full     = $locale->locale;   // Example: "en-US"
     $language = $locale->language; // Example: "en"
     $country  = $locale->country;  // Example: "US"
     $weight   = $locale->weight;   // Example: 1.0
@@ -70,7 +73,7 @@ If no locales exist, an empty array will be returned.
 
 ``` php
 foreach ($locales as $locale) {
-    $full     = $locale->full;     // Example: "en-US"
+    $full     = $locale->locale;   // Example: "en-US"
     $language = $locale->language; // Example: "en"
     $country  = $locale->country;  // Example: "US"
     $weight   = $locale->weight;   // Example: 1.0  
@@ -82,7 +85,7 @@ foreach ($locales as $locale) {
 You can get a flattened array, containing only specific locale info. These arrays will always be sorted by weight in descending order. There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
 
 ``` php
-$locales = $browser->getLocales('full');
+$locales = $browser->getLocales('locale');
 //=> Result: ['en-US', 'en', 'nl-BE', 'nl']
 
 $languages = $browser->getLocales('language');
