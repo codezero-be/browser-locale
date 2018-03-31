@@ -86,15 +86,19 @@ You can get a flattened array, containing only specific locale info. These array
 
 ``` php
 $locales = $browser->getLocales('locale');
-//=> Result: ['en-US', 'en', 'nl-BE', 'nl']
+//=> 'en-US,en;q=0.8,nl-NL;q=0.6'
+//=> Result: ['en-US', 'en', 'nl-BE']
 
 $languages = $browser->getLocales('language');
+//=> 'en-US,en;q=0.8,nl-NL;q=0.6'
 //=> Result: ['en', 'nl']
 
 $countries = $browser->getLocales('country');
+//=> 'en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4'
 //=> Result: ['US', 'BE']
 
 $weights = $browser->getLocales('weight');
+//=> 'en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4'
 //=> Result: [1.0, 0.8, 0.6, 0.4]
 ```
 

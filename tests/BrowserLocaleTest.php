@@ -61,17 +61,17 @@ class BrowserLocaleTest extends TestCase
     /** @test */
     public function it_returns_a_simple_array_of_locale_locales()
     {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
 
         $locales = $browser->getLocales('locale');
 
-        $this->assertEquals(['en-US', 'en', 'nl-NL', 'nl'], $locales);
+        $this->assertEquals(['en-US', 'en', 'nl-NL'], $locales);
     }
 
     /** @test */
     public function it_returns_a_simple_array_of_language_codes()
     {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
+        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
 
         $locales = $browser->getLocales('language');
 
