@@ -2,6 +2,8 @@
 
 namespace CodeZero\BrowserLocale;
 
+use CodeZero\BrowserLocale\Filters\Filter;
+
 class BrowserLocale
 {
     /**
@@ -10,13 +12,6 @@ class BrowserLocale
      * @var array
      */
     protected $locales = [];
-
-    /**
-     * Supported filters for getLocales().
-     *
-     * @var array
-     */
-    protected $filters = ['locale', 'language', 'country', 'weight'];
 
     /**
      * Create a new BrowserLocale instance.
@@ -40,19 +35,24 @@ class BrowserLocale
 
     /**
      * Get an array of Locale objects in descending order of preference.
-     * Specify a Locale property to get a flattened array of values of that property.
-     *
-     * @param string $property
      *
      * @return array
      */
-    public function getLocales($property = null)
+    public function getLocales()
     {
-        if ( ! in_array($property, $this->filters)) {
-            return $this->locales;
-        }
+        return $this->locales;
+    }
 
-        return $this->filterLocaleInfo($property);
+    /**
+     * Filter the locales using the given Filter.
+     *
+     * @param \CodeZero\BrowserLocale\Filters\Filter $filter
+     *
+     * @return array
+     */
+    public function filter(Filter $filter)
+    {
+        return $filter->filter($this->locales);
     }
 
     /**
@@ -166,26 +166,5 @@ class BrowserLocale
 
             return ($a->weight > $b->weight) ? -1 : 1;
         });
-    }
-
-    /**
-     * Get a flattened array of locale information,
-     * containing only the requested property values.
-     *
-     * @param string $property
-     *
-     * @return array
-     */
-    protected function filterLocaleInfo($property)
-    {
-        $filtered = [];
-
-        foreach ($this->locales as $locale) {
-            if ($locale->$property && ! in_array($locale->$property, $filtered)) {
-                $filtered[] = $locale->$property;
-            }
-        }
-
-        return $filtered;
     }
 }

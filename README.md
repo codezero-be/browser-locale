@@ -80,27 +80,38 @@ foreach ($locales as $locale) {
 }
 ```
 
-## Get Flattened Array
+## Filter Locale Info
 
-You can get a flattened array, containing only specific locale info. These arrays will always be sorted by weight in descending order. There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
+You can get a flattened array with only specific Locale information. These arrays will always be sorted by weight in descending order. There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
 
 ``` php
-$locales = $browser->getLocales('locale');
+$filter = \CodeZero\BrowserLocale\Filters\LocaleFilter;
+$locales = $browser->filter($filter);
 //=> 'en-US,en;q=0.8,nl-NL;q=0.6'
 //=> Result: ['en-US', 'en', 'nl-BE']
 
-$languages = $browser->getLocales('language');
+$filter = \CodeZero\BrowserLocale\Filters\CombinedFilter;
+$locales = $browser->filter($filter);
+//=> 'en-US,nl-NL;q=0.8,nl;q=0.6'
+//=> Result: ['en-US', 'en', 'nl-BE', 'nl']
+
+$filter = \CodeZero\BrowserLocale\Filters\LanguageFilter;
+$languages = $browser->filter($filter);
 //=> 'en-US,en;q=0.8,nl-NL;q=0.6'
 //=> Result: ['en', 'nl']
 
-$countries = $browser->getLocales('country');
+$filter = \CodeZero\BrowserLocale\Filters\CountryFilter;
+$countries = $browser->filter($filter);
 //=> 'en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4'
 //=> Result: ['US', 'BE']
 
-$weights = $browser->getLocales('weight');
+$filter = \CodeZero\BrowserLocale\Filters\WeightFilter;
+$weights = $browser->filter($filter);
 //=> 'en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4'
 //=> Result: [1.0, 0.8, 0.6, 0.4]
 ```
+
+You can create your own filters by implementing the `\CodeZero\BrowserLocale\Filters\Filter` interface.
 
 ## Testing
 

@@ -3,6 +3,8 @@
 namespace CodeZero\BrowserLocale\Tests;
 
 use CodeZero\BrowserLocale\BrowserLocale;
+use CodeZero\BrowserLocale\Filters\Filter;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class BrowserLocaleTest extends TestCase
@@ -59,46 +61,6 @@ class BrowserLocaleTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_simple_array_of_locale_locales()
-    {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
-
-        $locales = $browser->getLocales('locale');
-
-        $this->assertEquals(['en-US', 'en', 'nl-NL'], $locales);
-    }
-
-    /** @test */
-    public function it_returns_a_simple_array_of_language_codes()
-    {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
-
-        $locales = $browser->getLocales('language');
-
-        $this->assertEquals(['en', 'nl'], $locales);
-    }
-
-    /** @test */
-    public function it_returns_a_simple_array_of_country_codes()
-    {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
-
-        $locales = $browser->getLocales('country');
-
-        $this->assertEquals(['US', 'NL'], $locales);
-    }
-
-    /** @test */
-    public function it_returns_a_simple_array_of_weight_values()
-    {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
-
-        $locales = $browser->getLocales('weight');
-
-        $this->assertEquals([1.0, 0.8, 0.6, 0.4], $locales);
-    }
-
-    /** @test */
     public function it_returns_null_or_an_empty_array_if_no_locale_exists()
     {
         $browser = new BrowserLocale('');
@@ -122,5 +84,22 @@ class BrowserLocaleTest extends TestCase
         $this->assertEquals([], $browser->getLocales('language'));
         $this->assertEquals([], $browser->getLocales('country'));
         $this->assertEquals([], $browser->getLocales('weight'));
+    }
+
+    /** @test */
+    public function it_applies_a_filters_to_the_locales()
+    {
+        $browser = new BrowserLocale('');
+
+        $filter = Mockery::mock(Filter::class)
+            ->expects()
+            ->filter([])
+            ->once()
+            ->andReturns(['result'])
+            ->getMock();
+
+        $locales = $browser->filter($filter);
+
+        $this->assertEquals(['result'], $locales);
     }
 }
