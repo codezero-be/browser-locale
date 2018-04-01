@@ -2,8 +2,8 @@
 
 namespace CodeZero\BrowserLocale\Tests\Filters;
 
-use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\BrowserLocale\Filters\WeightFilter;
+use CodeZero\BrowserLocale\Locale;
 use PHPUnit\Framework\TestCase;
 
 class WeightFilterTest extends TestCase
@@ -11,9 +11,12 @@ class WeightFilterTest extends TestCase
     /** @test */
     public function it_returns_a_simple_array_of_weight_values()
     {
-        $browser = new BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
-
-        $locales = $browser->filter(new WeightFilter);
+        $locales = (new WeightFilter)->filter([
+            new Locale('en-US', 'en', 'US', 1.0),
+            new Locale('en', 'en', '', 0.8),
+            new Locale('nl-NL', 'nl', 'NL', 0.6),
+            new Locale('nl', 'nl', '', 0.4),
+        ]);
 
         $this->assertEquals([1.0, 0.8, 0.6, 0.4], $locales);
     }
@@ -21,9 +24,7 @@ class WeightFilterTest extends TestCase
     /** @test */
     public function it_returns_an_empty_array_if_no_locales_exist()
     {
-        $browser = new BrowserLocale('');
-
-        $locales = $browser->filter(new WeightFilter);
+        $locales = (new WeightFilter)->filter([]);
 
         $this->assertEquals([], $locales);
     }

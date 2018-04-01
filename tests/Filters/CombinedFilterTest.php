@@ -2,8 +2,8 @@
 
 namespace CodeZero\BrowserLocale\Tests\Filters;
 
-use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\BrowserLocale\Filters\CombinedFilter;
+use CodeZero\BrowserLocale\Locale;
 use PHPUnit\Framework\TestCase;
 
 class CombinedFilterTest extends TestCase
@@ -11,9 +11,10 @@ class CombinedFilterTest extends TestCase
     /** @test */
     public function it_returns_a_combined_array_of_locales_and_languages()
     {
-        $browser = new BrowserLocale('en-US,nl;q=0.8');
-
-        $locales = $browser->filter(new CombinedFilter);
+        $locales = (new CombinedFilter)->filter([
+            new Locale('en-US', 'en', 'US', 1.0),
+            new Locale('nl', 'nl', '', 0.8),
+        ]);
 
         $this->assertEquals(['en-US', 'en', 'nl'], $locales);
     }
@@ -21,9 +22,7 @@ class CombinedFilterTest extends TestCase
     /** @test */
     public function it_returns_an_empty_array_if_no_locales_exist()
     {
-        $browser = new BrowserLocale('');
-
-        $locales = $browser->filter(new CombinedFilter);
+        $locales = (new CombinedFilter)->filter([]);
 
         $this->assertEquals([], $locales);
     }
