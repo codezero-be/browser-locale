@@ -24,7 +24,7 @@ This can be read by PHP, usually with the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` var
 
 ## Install
 
-```
+```php
 composer require codezero/browser-locale
 ```
 
