@@ -84,27 +84,55 @@ foreach ($locales as $locale) {
 
 You can get a flattened array with only specific Locale information. These arrays will always be sorted by weight in descending order. There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
 
+#### LocaleFilter
+
+Returns an array of every locale found in the input string.
+
 ``` php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
 $filter = \CodeZero\BrowserLocale\Filters\LocaleFilter;
 $locales = $browser->filter($filter);
 //=> Result: ['en-US', 'en', 'nl-BE']
+```
 
-$browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,nl-NL;q=0.8,nl;q=0.6');
+#### CombinedFilter
+
+Returns an array of every locale found in the input string, while making sure the 2-letter language version of the locale is always present.
+
+``` php
+$browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,nl;q=0.8');
 $filter = \CodeZero\BrowserLocale\Filters\CombinedFilter;
 $locales = $browser->filter($filter);
-//=> Result: ['en-US', 'en', 'nl-BE', 'nl']
+//=> Result: ['en-US', 'en', 'nl']
+```
 
+#### LanguageFilter
+
+Returns an array of only the 2-letter language codes found in the input string. Language codes are also extracted from full locales and added to the results array.
+
+``` php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
 $filter = \CodeZero\BrowserLocale\Filters\LanguageFilter;
 $languages = $browser->filter($filter);
 //=> Result: ['en', 'nl']
+```
 
+#### CountryFilter
+
+Returns an array of only the 2-letter country codes found in the input string. Locales that only contain a 2-letter language code will be skipped.
+
+``` php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 $filter = \CodeZero\BrowserLocale\Filters\CountryFilter;
 $countries = $browser->filter($filter);
 //=> Result: ['US', 'BE']
+```
 
+#### WeightFilter
+
+Returns an array of all relative quality factors found in the input string. The default of `1.0` is also included.
+
+``` php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 $filter = \CodeZero\BrowserLocale\Filters\WeightFilter;
 $weights = $browser->filter($filter);
