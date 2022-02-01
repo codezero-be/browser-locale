@@ -1,11 +1,13 @@
 # BrowserLocale
 
-[![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg)]()
-[![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg)]()
-[![Build Status](https://scrutinizer-ci.com/g/codezero-be/browser-locale/badges/build.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/browser-locale/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/codezero-be/browser-locale/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/browser-locale/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/codezero-be/browser-locale/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/browser-locale/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/codezero/browser-locale.svg)](https://packagist.org/packages/codezero/browser-locale)
+[![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg?style=flat-square)](CHANGELOG.md)
+[![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/github/workflow/status/codezero-be/browser-locale/Tests/master?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/browser-locale/actions)
+[![Code Coverage](https://img.shields.io/codacy/coverage/7948f1eaee514e47b4a07f268afc630f/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/browser-locale)
+[![Code Quality](https://img.shields.io/codacy/grade/7948f1eaee514e47b4a07f268afc630f/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/browser-locale)
+[![Total Downloads](https://img.shields.io/packagist/dt/codezero/browser-locale.svg?style=flat-square)](https://packagist.org/packages/codezero/browser-locale)
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R3UQ8V)
 
 #### Get the most preferred locales from your visitor's browser.
 
