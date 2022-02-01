@@ -6,7 +6,7 @@ use CodeZero\BrowserLocale\Filters\LocaleFilter;
 use CodeZero\BrowserLocale\Locale;
 use PHPUnit\Framework\TestCase;
 
-class LocaleFilterwTest extends TestCase
+class LocaleFilterTest extends TestCase
 {
     /** @test */
     public function it_filters_a_simple_array_of_locales()
