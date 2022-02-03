@@ -1,6 +1,6 @@
 # BrowserLocale
 
-[![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg?style=flat-square)](CHANGELOG.md)
+[![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg?style=flat-square)](https://github.com/codezero-be/browser-locale/releases)
 [![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/github/workflow/status/codezero-be/browser-locale/Tests/master?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/browser-locale/actions)
 [![Code Coverage](https://img.shields.io/codacy/coverage/7948f1eaee514e47b4a07f268afc630f/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/browser-locale)
