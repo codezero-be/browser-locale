@@ -109,6 +109,10 @@ class BrowserLocale
      */
     protected function split($string, $delimiter)
     {
+        if ( ! $string) {
+            return [];
+        }
+
         return explode($delimiter, trim($string)) ?: [];
     }
 
