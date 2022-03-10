@@ -13,6 +13,8 @@ Spread the word.
 And if you are from Russia and you are against this war, please express your protest in some way.
 I know you can get punished for this, but you are one of the hopes of those innocent people.
 
+---
+
 [![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg?style=flat-square)](https://github.com/codezero-be/browser-locale/releases)
 [![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/github/workflow/status/codezero-be/browser-locale/Tests/master?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/browser-locale/actions)
