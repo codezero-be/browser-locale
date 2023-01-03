@@ -142,7 +142,7 @@ Returns an array of only the 2-letter country codes found in the input string. L
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
 $filter = \CodeZero\BrowserLocale\Filters\CountryFilter;
 $countries = $browser->filter($filter);
-//=> Result: ['US', 'BE']
+//=> Result: ['US', 'NL']
 ```
 
 #### WeightFilter
