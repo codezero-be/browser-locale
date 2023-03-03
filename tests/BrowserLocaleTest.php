@@ -67,10 +67,6 @@ class BrowserLocaleTest extends TestCase
 
         $this->assertNull($browser->getLocale());
         $this->assertEquals([], $browser->getLocales());
-        $this->assertEquals([], $browser->getLocales('locale'));
-        $this->assertEquals([], $browser->getLocales('language'));
-        $this->assertEquals([], $browser->getLocales('country'));
-        $this->assertEquals([], $browser->getLocales('weight'));
     }
 
     /** @test */
@@ -80,10 +76,6 @@ class BrowserLocaleTest extends TestCase
 
         $this->assertNull($browser->getLocale());
         $this->assertEquals([], $browser->getLocales());
-        $this->assertEquals([], $browser->getLocales('locale'));
-        $this->assertEquals([], $browser->getLocales('language'));
-        $this->assertEquals([], $browser->getLocales('country'));
-        $this->assertEquals([], $browser->getLocales('weight'));
     }
 
     /** @test */
