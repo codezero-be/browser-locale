@@ -1,20 +1,5 @@
 # BrowserLocale
 
-## IMPORTANT: March 2022
-
-[![Support Ukraine](https://raw.githubusercontent.com/hampusborgos/country-flags/main/png100px/ua.png)](https://github.com/hampusborgos/country-flags/blob/main/png100px/ua.png)
-
-It's horrible to see what is happening now in Ukraine, as Russian army is
-[bombarding houses, hospitals and kindergartens](https://twitter.com/DavidCornDC/status/1501620037785997316).
-
-Please [check out supportukrainenow.org](https://supportukrainenow.org/) for the ways how you can help people there.
-Spread the word.
-
-And if you are from Russia and you are against this war, please express your protest in some way.
-I know you can get punished for this, but you are one of the hopes of those innocent people.
-
----
-
 [![GitHub release](https://img.shields.io/github/release/codezero-be/browser-locale.svg?style=flat-square)](https://github.com/codezero-be/browser-locale/releases)
 [![License](https://img.shields.io/packagist/l/codezero/browser-locale.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/codezero-be/browser-locale/run-tests.yml?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/browser-locale/actions)
@@ -24,7 +9,7 @@ I know you can get punished for this, but you are one of the hopes of those inno
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R3UQ8V)
 
-#### Get the most preferred locales from your visitor's browser.
+Get the most preferred locales from your visitor's browser.
 
 Every browser has a setting for preferred website locales.
 
@@ -34,26 +19,25 @@ This can be read by PHP, usually with the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` var
 
 **BrowserLocale** parses this string and lets you access the preferred locales quickly and easily.
 
-
 ##  Requirements
 
 - PHP >= 7.0
 
 ## Install
 
-```php
+```bash
 composer require codezero/browser-locale
 ```
 
 ## Instantiate
 
-#### For vanilla PHP:
+For vanilla PHP:
 
-``` php
+```php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
 ```
 
-#### For Laravel:
+For Laravel:
 
 Laravel >= 5.5 will automatically register the ServiceProvider so you can get `BrowserLocale` from the IOC container.
 
@@ -63,13 +47,13 @@ $browser = \App::make(\CodeZero\BrowserLocale\BrowserLocale::class);
 
 ## Get Primary Locale
 
-``` php
+```php
 $locale = $browser->getLocale();
 ```
 
 This will return an instance of `\CodeZero\BrowserLocale\Locale` or `null` if no locale exists.
 
-``` php
+```php
 if ($locale !== null) {
     $full     = $locale->locale;   // Example: "en-US"
     $language = $locale->language; // Example: "en"
@@ -84,11 +68,12 @@ if ($locale !== null) {
 $locales = $browser->getLocales();
 ```
 
-This will return an array of `\CodeZero\BrowserLocale\Locale` instances, sorted by weight in descending order. So the first array item is the most preferred locale.
+This will return an array of `\CodeZero\BrowserLocale\Locale` instances, sorted by weight in descending order.
+So the first array item is the most preferred locale.
 
 If no locales exist, an empty array will be returned.
 
-``` php
+```php
 foreach ($locales as $locale) {
     $full     = $locale->locale;   // Example: "en-US"
     $language = $locale->language; // Example: "en"
@@ -99,59 +84,61 @@ foreach ($locales as $locale) {
 
 ## Filter Locale Info
 
-You can get a flattened array with only specific Locale information. These arrays will always be sorted by weight in descending order. There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
+You can get a flattened array with only specific Locale information.
+These arrays will always be sorted by weight in descending order.
+There will be no duplicate values! (e.g. `en` and `en-US` are both the language `en`)
 
-#### LocaleFilter
+### LocaleFilter
 
 Returns an array of every locale found in the input string.
 
-``` php
+```php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
-$filter = \CodeZero\BrowserLocale\Filters\LocaleFilter;
+$filter = new \CodeZero\BrowserLocale\Filters\LocaleFilter;
 $locales = $browser->filter($filter);
 //=> Result: ['en-US', 'en', 'nl-BE']
 ```
 
-#### CombinedFilter
+### CombinedFilter
 
 Returns an array of every locale found in the input string, while making sure the 2-letter language version of the locale is always present.
 
-``` php
+```php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,nl;q=0.8');
-$filter = \CodeZero\BrowserLocale\Filters\CombinedFilter;
+$filter = new \CodeZero\BrowserLocale\Filters\CombinedFilter;
 $locales = $browser->filter($filter);
 //=> Result: ['en-US', 'en', 'nl']
 ```
 
-#### LanguageFilter
+### LanguageFilter
 
 Returns an array of only the 2-letter language codes found in the input string. Language codes are also extracted from full locales and added to the results array.
 
-``` php
+```php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6');
-$filter = \CodeZero\BrowserLocale\Filters\LanguageFilter;
+$filter = new \CodeZero\BrowserLocale\Filters\LanguageFilter;
 $languages = $browser->filter($filter);
 //=> Result: ['en', 'nl']
 ```
 
-#### CountryFilter
+### CountryFilter
 
 Returns an array of only the 2-letter country codes found in the input string. Locales that only contain a 2-letter language code will be skipped.
 
-``` php
+```php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
-$filter = \CodeZero\BrowserLocale\Filters\CountryFilter;
+$filter = new \CodeZero\BrowserLocale\Filters\CountryFilter;
 $countries = $browser->filter($filter);
 //=> Result: ['US', 'NL']
 ```
 
-#### WeightFilter
+### WeightFilter
 
 Returns an array of all relative quality factors found in the input string. The default of `1.0` is also included.
 
-``` php
+```php
 $browser = new \CodeZero\BrowserLocale\BrowserLocale('en-US,en;q=0.8,nl-NL;q=0.6,nl;q=0.4');
-$filter = \CodeZero\BrowserLocale\Filters\WeightFilter;
+$filter = new \CodeZero\BrowserLocale\Filters\WeightFilter;
 $weights = $browser->filter($filter);
 //=> Result: [1.0, 0.8, 0.6, 0.4]
 ```
@@ -160,7 +147,7 @@ You can create your own filters by implementing the `\CodeZero\BrowserLocale\Fil
 
 ## Testing
 
-``` 
+```bash
 composer test
 ```
 
