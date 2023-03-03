@@ -20,7 +20,7 @@ class BrowserLocale
      */
     public function __construct($httpAcceptLanguages)
     {
-        $this->parseHttpAcceptLanguages($httpAcceptLanguages);
+        $this->locales = $this->parseHttpAcceptLanguages($httpAcceptLanguages);
     }
 
     /**
@@ -64,13 +64,16 @@ class BrowserLocale
      */
     protected function parseHttpAcceptLanguages($httpAcceptLanguages)
     {
-        $locales = $this->split($httpAcceptLanguages, ',');
+        $acceptLanguages = $this->split($httpAcceptLanguages, ',');
+        $locales = [];
 
-        foreach ($locales as $httpAcceptLanguage) {
-            $this->makeLocale($httpAcceptLanguage);
+        foreach ($acceptLanguages as $httpAcceptLanguage) {
+            $locales[] = $this->makeLocale($httpAcceptLanguage);
         }
 
-        $this->sortLocales();
+        $sortedLocales = $this->sortLocales($locales);
+
+        return $sortedLocales;
     }
 
     /**
@@ -78,7 +81,7 @@ class BrowserLocale
      *
      * @param string $httpAcceptLanguage
      *
-     * @return void
+     * @return \CodeZero\BrowserLocale\Locale
      */
     protected function makeLocale($httpAcceptLanguage)
     {
@@ -87,11 +90,7 @@ class BrowserLocale
         $locale = $parts[0];
         $weight = $parts[1] ?? null;
 
-        if (empty($locale)) {
-            return;
-        }
-
-        $this->locales[] = new Locale(
+        return new Locale(
             $locale,
             $this->getLanguage($locale),
             $this->getCountry($locale),
@@ -143,13 +142,13 @@ class BrowserLocale
     /**
      * Parse the relative quality factor and return its value.
      *
-     * @param string $q
+     * @param string $qualityFactor
      *
      * @return float
      */
-    protected function getWeight($q)
+    protected function getWeight($qualityFactor)
     {
-        $parts = $this->split($q, '=');
+        $parts = $this->split($qualityFactor, '=');
 
         $weight = $parts[1] ?? 1.0;
 
@@ -159,16 +158,20 @@ class BrowserLocale
     /**
      * Sort the array of locales in descending order of preference.
      *
-     * @return void
+     * @param array $locales
+     *
+     * @return array
      */
-    protected function sortLocales()
+    protected function sortLocales($locales)
     {
-        usort($this->locales, function ($a, $b) {
-            if ($a->weight === $b->weight) {
+        usort($locales, function ($localeA, $localeB) {
+            if ($localeA->weight === $localeB->weight) {
                 return 0;
             }
 
-            return ($a->weight > $b->weight) ? -1 : 1;
+            return ($localeA->weight > $localeB->weight) ? -1 : 1;
         });
+
+        return $locales;
     }
 }
