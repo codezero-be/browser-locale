@@ -21,7 +21,7 @@ This can be read by PHP, usually with the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]` var
 
 ##  Requirements
 
-- PHP >= 7.0
+- PHP >= 8.1
 
 ## Install
 
@@ -39,7 +39,7 @@ $browser = new \CodeZero\BrowserLocale\BrowserLocale($_SERVER["HTTP_ACCEPT_LANGU
 
 For Laravel:
 
-Laravel >= 5.5 will automatically register the ServiceProvider so you can get `BrowserLocale` from the IOC container.
+Laravel will automatically register the ServiceProvider so you can get `BrowserLocale` from the IOC container.
 
 ```php
 $browser = \App::make(\CodeZero\BrowserLocale\BrowserLocale::class);
